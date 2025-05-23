@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    @media (max-width: 540px) {
+      .horizontal { display: none; }
+      .vertical { display: block; }
+    }
+    @media (min-width: 541px) {
+      .horizontal { display: block; }
+      .vertical { display: none; }
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8f8f8;
+    }
+    .calculator {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      width: fit-content;
+      max-width: 500px;
+      background: #f3f3f2;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    }
+    #v-display2, #h-display2 {
+      width: 100%;
+      height: 40px;
+      font-size: 24px;
+      text-align: right;
+      padding: 10px;
+      border: 1px solid #000;
+      background: white;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 4px;
+      table-layout: fixed;
+    }
+    td {
+      padding: 0;
+    }
+    button {
+      width: 95%;
+      height: 50px;
+      font-size: 21px;
+      font-weight: 550;
+      border: 1px solid #bbb;
+      cursor: pointer;
+      background: #e0e0e0;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #d6d6d6;
+    }
+    .operator {
+      background: #ffcc00;
+      font-weight: bold;
+    }
+    .operator:hover {
+      background: #ffb700;
+    }
+    .num {
+      background: white;
+    }
+    .ce {
+      font-weight: 520;
+    }
+    .widget-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .widget-link a {
+      color: #007bff;
+      font-size: 14px;
+      text-decoration: underline;
+      font-style: italic;
+    }
+    .widget-link a:hover {
+      color: #0056b3;
+    }
+    .calculator-logo {
+      text-align: right;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+      font-family: "Georgia", serif;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <!-- 세로 모드 -->
+    <div class="vertical">
+      <div id="v-display2">0</div>
+      <table>
+        <tr>
+          <td><button class="ce" onclick="clearEntry()">C</button></td>
+          <td><button class="ce" onclick="inverse()">1/x</button></td>
+          <td><button class="ce" onclick="factorial()">n!</button></td>
+          <td><button class="ce" onclick="useAnswer()">Ans</button></td></tr>
+        <tr>
+          <td><button class="ce" onclick="allClear()">AC</button></td>
+          <td><button class="ce" onclick="squareRoot()">√x</button></td>
+          <td><button class="ce" onclick="percent()">%</button></td>
+          <td><button class="operator" onclick="setOperator('÷')">÷</button></td>
+        </tr>
+        <tr>
+          <td><button class="num" onclick="appendNumber(7)">7</button></td>
+          <td><button class="num" onclick="appendNumber(8)">8</button></td>
+          <td><button class="num" onclick="appendNumber(9)">9</button></td>
+          <td><button class="operator" onclick="setOperator('×')">×</button></td>
+        </tr>
+        <tr>
+          <td><button class="num" onclick="appendNumber(4)">4</button></td>
+          <td><button class="num" onclick="appendNumber(5)">5</button></td>
+          <td><button class="num" onclick="appendNumber(6)">6</button></td>
+          <td><button class="operator" onclick="setOperator('-')">-</button></td>
+        </tr>
+        <tr>
+          <td><button class="num" onclick="appendNumber(1)">1</button></td>
+          <td><button class="num" onclick="appendNumber(2)">2</button></td>
+          <td><button class="num" onclick="appendNumber(3)">3</button></td>
+          <td><button class="operator" onclick="setOperator('+')">+</button></td>
+        </tr>
+        <tr>
+          <td><button class="num" onclick="appendNumber(0)">0</button></td>
+          <td><button class="num" onclick="appendNumber('.')">.</button></td>
+          <td><button class="num" onclick="toggleSign()">+/-</button></td>
+          <td><button class="operator" onclick="calculate()">=</button></td>
+        </tr>
+        <tr>
+          <td><button class="ce" onclick="insertPi()">π</button></td>
+          <td><button class="ce" onclick="square()">x²</button></td>
+          <td><button class="ce" onclick="roundTo(2)">R2</button></td>
+          <td><button class="ce" onclick="roundTo(0)">R0</button></td>
+        </tr>
+      </table>
+      <div class="widget-link">
+        <a href="https://www.calculatorsoup.com/calculators/math/basic.php" target="_blank">Get a Widget for this Calculator</a>
+        <div class="calculator-logo">© 20243076 허 석</div>
+      </div>
+    </div>
+
+    <!-- 가로 모드 -->
+    <div class="horizontal">
+      <div id="h-display2">0</div>
+      <table>
+        <tr>
+          <td><button class="ce" onclick="clearEntry()">C</button></td>
+          <td><button class="ce" onclick="useAnswer()">Ans</button></td>
+          <td><button class="num" onclick="appendNumber(7)">7</button></td>
+          <td><button class="num" onclick="appendNumber(8)">8</button></td>
+          <td><button class="num" onclick="appendNumber(9)">9</button></td>
+          <td><button class="operator" onclick="setOperator('÷')">÷</button></td>
+          <td><button onclick="roundTo(2)">R2</button></td>
+        </tr>
+        <tr>
+          <td><button class="ce" onclick="inverse()">1/x</button></td>
+          <td><button class="ce" onclick="factorial()">n!</button></td>
+          <td><button class="num" onclick="appendNumber(4)">4</button></td>
+          <td><button class="num" onclick="appendNumber(5)">5</button></td>
+          <td><button class="num" onclick="appendNumber(6)">6</button></td>
+          <td><button class="operator" onclick="setOperator('×')">×</button></td>
+          <td><button onclick="roundTo(0)">R0</button></td>
+        </tr>
+        <tr>
+          <td><button onclick="insertPi()">π</button></td>
+          <td><button onclick="square()">x²</button></td>
+          <td><button class="num" onclick="appendNumber(1)">1</button></td>
+          <td><button class="num" onclick="appendNumber(2)">2</button></td>
+          <td><button class="num" onclick="appendNumber(3)">3</button></td>
+          <td><button class="operator" onclick="setOperator('-')">-</button></td>
+          <td><button onclick="allClear()">AC</button></td>
+        </tr>
+        <tr>
+          <td><button onclick="squareRoot()">√x</button></td>
+          <td><button onclick="percent()">%</button></td>
+          <td><button class="num" onclick="appendNumber(0)">0</button></td>
+          <td><button class="num" onclick="appendNumber('.')">.</button></td>
+          <td><button class="num" onclick="toggleSign()">+/-</button></td>
+          <td><button class="operator" onclick="setOperator('+')">+</button></td>
+          <td><button class="operator" onclick="calculate()">=</button></td>
+        </tr>
+      </table>
+      <div class="widget-link">
+        <a href="https://www.calculatorsoup.com/calculators/math/basic.php" target="_blank">Get a Widget for this Calculator</a>
+      </div>
+      <div class="calculator-logo">© 20243076 허 석</div>
+    </div>
+  </div>
+
+  <script>
+    let curValue = 0;
+let operator = '';
+let isNewInput = true;
+let displayValue = '0';
+
+function updateDisplays() {
+  document.getElementById('v-display2').innerHTML = displayValue;
+  document.getElementById('h-display2').innerHTML = displayValue;
+}
+
+function appendNumber(num) {
+  if (isNewInput || displayValue === '0') {
+    displayValue = String(num);
+    isNewInput = false;
+  } else {
+    displayValue += String(num);
+  }
+  updateDisplays();
+}
+
+function setOperator(op) {
+  curValue = parseFloat(displayValue);
+  operator = op;
+  isNewInput = true;
+}
+
+function calculate() {
+  const newValue = parseFloat(displayValue);
+  if (operator === '+') curValue += newValue;
+  else if (operator === '-') curValue -= newValue;
+  else if (operator === '×') curValue *= newValue;
+  else if (operator === '÷') curValue /= newValue;
+  displayValue = String(curValue);
+  updateDisplays();
+  isNewInput = true;
+}
+
+function allClear() {
+  curValue = 0;
+  operator = '';
+  displayValue = '0';
+  isNewInput = true;
+  updateDisplays();
+}
+    
+    function square() {
+  displayValue = String(Math.pow(parseFloat(displayValue), 2));
+  updateDisplays();
+  isNewInput = true;
+}
+
+function insertPi() {
+  if (isNewInput || displayValue === '0') {
+    displayValue = 'π';
+  } else {
+    displayValue += 'π';
+  }
+  updateDisplays();
+  isNewInput = false;
+}
+
+    function convertPi(value) {
+  if (value.includes('π')) {
+    let num = value.replace('π', '');
+    if (num === '') num = '1';
+    return parseFloat(num) * Math.PI;
+  }
+  return parseFloat(value);
+}
+
+    function calculate() {
+  const newValue = convertPi(displayValue);
+  if (operator === '+') curValue += newValue;
+  else if (operator === '-') curValue -= newValue;
+  else if (operator === '×') curValue *= newValue;
+  else if (operator === '÷') curValue /= newValue;
+  displayValue = String(curValue);
+  lastAnswer = curValue; // ★ 계산 결과를 lastAnswer에 저장
+  updateDisplays();
+  isNewInput = true;
+}
+
+function percent() {
+  displayValue = String(parseFloat(displayValue) / 100);
+  updateDisplays();
+  isNewInput = true;
+}
+
+function squareRoot() {
+  const num = parseFloat(displayValue);
+  if (num >= 0) {
+    displayValue = String(Math.sqrt(num));
+  } else {
+    displayValue = 'Error';
+  }
+  updateDisplays();
+  isNewInput = true;
+}
+    
+    function roundTo(n) {
+  if (!isNaN(displayValue)) {
+    displayValue = String(Number(displayValue).toFixed(n));
+    updateDisplays();
+  }
+}
+
+function toggleSign() {
+  if (displayValue.startsWith('-')) {
+    displayValue = displayValue.slice(1);
+  } else if (displayValue !== '0') {
+    displayValue = '-' + displayValue;
+  }
+  updateDisplays();
+}
+    
+    function appendNumber(num) {
+  if (num === '.' && displayValue.includes('.')) return;
+  if (isNewInput || displayValue === '0') {
+    displayValue = String(num);
+    isNewInput = false;
+  } else {
+    displayValue += String(num);
+  }
+  updateDisplays();
+}
+
+    function insertPi() {
+  if (displayValue.includes('π')) return; // π가 이미 있으면 무시
+  if (isNewInput || displayValue === '0') {
+    displayValue = 'π';
+  } else {
+    displayValue += 'π';
+  }
+  updateDisplays();
+  isNewInput = false;
+}
+
+    let lastAnswer = 0; // 최근 계산 결과 저장용 변수
+
+function clearEntry() {
+  displayValue = '0';
+  isNewInput = true;
+  updateDisplays();
+}
+
+function useAnswer() {
+  displayValue = String(lastAnswer);
+  isNewInput = true;
+  updateDisplays();
+}
+
+function inverse() {
+  const num = convertPi(displayValue);
+  if (num === 0) {
+    displayValue = 'Error';
+  } else {
+    displayValue = String(1 / num);
+  }
+  updateDisplays();
+  isNewInput = true;
+}
+
+function factorial() {
+  const num = convertPi(displayValue);
+  if (num < 0 || !Number.isInteger(num)) {
+    displayValue = 'Error';
+  } else {
+    let fact = 1;
+    for (let i = 2; i <= num; i++) {
+      fact *= i;
+    }
+    displayValue = String(fact);
+  }
+  updateDisplays();
+  isNewInput = true;
+}
+
+    
+  </script>
+
+</body>
+</html>
